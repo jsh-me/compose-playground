@@ -56,4 +56,8 @@ class HomeViewModel @Inject constructor(
                 }
             )
     }
+
+    fun searchKeyword(keyword: String) {
+
+    }
 }
