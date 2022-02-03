@@ -66,6 +66,8 @@ dependencies {
     implementation(Dependency.Compose.MATERIAL)
     implementation(Dependency.Compose.TOOL_PREVIEW)
     implementation(Dependency.Compose.ACTIVITY)
+    implementation(Dependency.Compose.CONSTRAINT_LAYOUT)
+
     androidTestImplementation(Dependency.Compose.JUNIT)
     debugImplementation(Dependency.Compose.TOOL_UI)
 
@@ -76,6 +78,8 @@ dependencies {
 
     implementation(Dependency.Kotlin.COROUTINE_CORE)
     implementation(Dependency.Kotlin.COROUTINE_ANDROID)
+
+    implementation(Dependency.Coil.COIL)
 
     testImplementation(Dependency.Test.JUNIT)
     androidTestImplementation(Dependency.Test.ANDROID_JUNIT)
