@@ -24,7 +24,7 @@ object Dependency {
         const val JUNIT = "androidx.compose.ui:ui-test-junit4:$compose_version"
         const val TOOL_UI = "androidx.compose.ui:ui-tooling:$compose_version"
         const val ACTIVITY = "androidx.activity:activity-compose:1.4.0"
-        const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+        const val CONSTRAINT_LAYOUT = "androidx.constraintlayout:constraintlayout-compose:1.0.0"
     }
 
     object Dagger {

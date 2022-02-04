@@ -29,6 +29,7 @@ class FetchPopularMovieListUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ): BaseUseCase<Flow<TaskResult<MovieListEntity>>, FetchPopularMovieListUseCase.Params>() {
 
+    // ?? 왜있징
     class Params(
         val page: Int
     )
