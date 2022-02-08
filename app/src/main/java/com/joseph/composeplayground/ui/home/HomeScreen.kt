@@ -14,10 +14,16 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -66,13 +72,22 @@ fun HomeScreen(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp),
+                        .padding(top = 26.dp),
                     text = "Popular Movies",
                     fontFamily = Suit,
-                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
                     textAlign = TextAlign.Left,
                     color = Color.White
                 )
+//                PopularMovies {
+//                    this@LazyColumn.items(
+//                        items = uiState.value.popularMovieList.movies,
+//                        itemContent = {
+//                            PopularMovieItem(movie = it)
+//                        }
+//                    )
+//                }
             }
 
             items(
@@ -85,28 +100,32 @@ fun HomeScreen(
     }
 }
 
+// 어떻게 하징
 @Composable
-fun Title() {
+fun PopularMovies(content: @Composable () -> Unit) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp),
-        text = "Compose Playground",
+            .padding(top = 26.dp),
+        text = "Popular Movies",
         fontFamily = Suit,
-        fontSize = 18.sp,
-        textAlign = TextAlign.Left,
-        color = Color.White
-    )
-
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        text = "Jetpack Compose + MVI",
-        fontFamily = Suit,
+        fontWeight = FontWeight.Bold,
         fontSize = 14.sp,
         textAlign = TextAlign.Left,
         color = Color.White
+    )
+    content()
+}
+
+@Composable
+fun Title() {
+    TwoLinesText(
+        title = "Compose Playground",
+        titleTextSize = 18.sp,
+        subTitle = "Jetpack Compose + MVI",
+        subTitleTextSize = 14.sp,
+        modifier = Modifier.wrapContentWidth(),
+        horizontalAlignment = Alignment.Start
     )
 }
 
@@ -139,10 +158,11 @@ fun UpcomingMovies(list: List<Movie>) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 16.dp),
+            .padding(top = 26.dp, bottom = 12.dp),
         text = "Upcoming Movies",
         fontFamily = Suit,
-        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
         textAlign = TextAlign.Left,
         color = Color.White
     )
@@ -169,48 +189,32 @@ fun UpcomingMovieItem(movie: Movie) {
     ) {
         val (image, englishTitle) = createRefs()
 
-        Image(
-            // https://developers.themoviedb.org/3/getting-started/images
-            painter = rememberImagePainter("https://image.tmdb.org/t/p/w500" + movie.posterPath),
-            contentDescription = movie.title,
-            contentScale = ContentScale.FillBounds,
+        GradientCard(
+            movie = movie,
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
+                .fillMaxSize()
                 .constrainAs(image) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
+                    width = Dimension.wrapContent
                 }
         )
 
-        Text(
-            text = movie.originalTitle ?: "",
-            fontFamily = Suit,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Right,
-            color = Color.White,
-            maxLines = 1,
+        TwoLinesText(
+            title = movie.title ?: "",
+            titleTextSize = 16.sp,
+            subTitle = movie.originalTitle ?: "",
+            subTitleTextSize = 12.sp,
             modifier = Modifier
                 .width(50.dp)
                 .constrainAs(englishTitle) {
-                    bottom.linkTo(image.bottom, margin = 8.dp)
-                    end.linkTo(image.end, margin = 8.dp)
+                    bottom.linkTo(parent.bottom, margin = 8.dp)
+                    end.linkTo(parent.end, margin = 8.dp)
                 }
         )
     }
-}
-
-@Composable
-fun LazyListScope.PopularMovies(list: List<Movie>) {
-    items(
-        items = list,
-        itemContent = {
-            PopularMovieItem(movie = it)
-        }
-    )
 }
 
 @Composable
@@ -222,12 +226,10 @@ fun PopularMovieItem(movie: Movie) {
             .height(250.dp)
             .background(Color.White),
     ) {
-        val (image, ratingBadge, ageBadge) = createRefs()
+        val (image, ratingBadge, ageBadge, titles) = remember { createRefs() }
 
-        Image(
-            painter = rememberImagePainter("https://image.tmdb.org/t/p/w500" + (movie.backdropPath ?: movie.posterPath)),
-            contentDescription = movie.title,
-            contentScale = ContentScale.FillBounds,
+        GradientCard(
+            movie = movie,
             modifier = Modifier
                 .fillMaxSize()
                 .constrainAs(image) {
@@ -236,8 +238,7 @@ fun PopularMovieItem(movie: Movie) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
-                }
-        )
+                })
 
         IconButton(
             modifier = Modifier
@@ -246,8 +247,8 @@ fun PopularMovieItem(movie: Movie) {
                 .clip(RoundedCornerShape(4.dp))
                 .background(color = Color.White)
                 .constrainAs(ratingBadge) {
-                    start.linkTo(image.start, margin = 10.dp)
-                    bottom.linkTo(image.bottom, margin = 12.dp)
+                    start.linkTo(parent.start, margin = 10.dp)
+                    bottom.linkTo(parent.bottom, margin = 12.dp)
                 },
             content = {
                 Column {
@@ -277,17 +278,88 @@ fun PopularMovieItem(movie: Movie) {
             },
             onClick = {}
         )
+
+        TwoLinesText(
+            title = movie.title ?: "",
+            titleTextSize = 12.sp,
+            subTitle = movie.originalTitle ?: "",
+            subTitleTextSize = 12.sp,
+            modifier = Modifier
+                .wrapContentWidth()
+                .constrainAs(titles) {
+                    end.linkTo(parent.end, margin = 8.dp)
+                    bottom.linkTo(parent.bottom, margin = 8.dp)
+                    start.linkTo(ageBadge.end, margin = 8.dp)
+                    linkTo(ageBadge.end, parent.end, startMargin = 8.dp, endMargin = 8.dp, bias = 1f)
+                    width = Dimension.wrapContent
+                }
+        )
     }
+}
+
+@Composable
+fun TwoLinesText(
+    title: String,
+    titleTextSize: TextUnit,
+    subTitle: String,
+    subTitleTextSize: TextUnit,
+    modifier: Modifier,
+    horizontalAlignment: Alignment.Horizontal = Alignment.End
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = horizontalAlignment
+    ) {
+        Text(
+            text = title,
+            fontSize = titleTextSize,
+            fontFamily = Suit,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            color = Color.White
+        )
+        Text(
+            text = subTitle,
+            fontSize = subTitleTextSize,
+            maxLines = 1,
+            color = Color.White
+        )
+    }
+}
+
+@Composable
+fun GradientCard(
+    movie: Movie,
+    content: @Composable (() -> Unit)? = null,
+    modifier: Modifier,
+) = Box {
+    Image(
+        painter = rememberImagePainter("https://image.tmdb.org/t/p/w500${movie.backdropPath}"),
+        contentDescription = movie.title,
+        contentScale = ContentScale.FillBounds,
+        modifier = modifier
+    )
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    listOf(
+                        Color.Transparent,
+                        Color.Black.copy(alpha = 0.8f)),
+                    0f,
+                    500f,
+                )
+            )
+    ) {}
+
+    content?.invoke()
 }
 
 @Preview
 @Composable
 fun TestUIPreview() {
     MaterialTheme {
-        // MainSearchBar()
-        ConstraintLayout(Modifier
-            .fillMaxWidth()
-            .height(200.dp)) {
-        }
     }
 }
