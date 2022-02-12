@@ -20,5 +20,8 @@ fun DetailScreen(
         viewModel.fetchMovieDetail(id)
     }
 
-    CollapsableToolbar(uiState.value.detailMovieState.targetMovie)
+    CollapsableToolbar(
+        uiState.value.detailMovieState.targetMovie,
+        uiState.value.recommendMovies.movies
+    )
 }

@@ -15,12 +15,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ExperimentalMotionApi
+import com.joseph.composeplayground.model.Movie
 import com.joseph.composeplayground.model.MovieDetail
 
 @ExperimentalMotionApi
 @ExperimentalMaterialApi
 @Composable
-fun CollapsableToolbar(movieDetail: MovieDetail) {
+fun CollapsableToolbar(
+    movieDetail: MovieDetail,
+    recommendedMovie: List<Movie>,
+) {
     val swipingState = rememberSwipeableState(initialValue = SwipingStates.EXPANDED)
 
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
@@ -77,21 +81,28 @@ fun CollapsableToolbar(movieDetail: MovieDetail) {
                 .nestedScroll(connection)
         ) {
             Column {
-//				Text(text = "From: ${swipingState.progress.from}", modifier = Modifier.padding(16.dp))
-//				Text(text = "To: ${swipingState.progress.to}", modifier = Modifier.padding(16.dp))
-//				Text(text = swipingState.progress.fraction.toString(), modifier = Modifier.padding(16.dp))
+                // https://stackoverflow.com/questions/70317745/why-swipetodismiss-throws-nosuchelementexception-in-jetpack-compose
+                val progress = kotlin.runCatching {
+                    if (swipingState.progress.to == SwipingStates.COLLAPSED)
+                        swipingState.progress.fraction
+                    else
+                        1f - swipingState.progress.fraction
+                }
+
                 MotionLayoutHeader(
-                    progress = if (swipingState.progress.to == SwipingStates.COLLAPSED) swipingState.progress.fraction else 1f - swipingState.progress.fraction,
+                    progress = progress.getOrDefault(0f),
                     movie = movieDetail
                 ) {
-                    ScrollableContent()
+                    ScrollableContent(
+                        movieDetail,
+                        recommendedMovie
+                    )
                 }
             }
         }
     }
 }
 
-// Helper class defining swiping State
 enum class SwipingStates {
     EXPANDED,
     COLLAPSED

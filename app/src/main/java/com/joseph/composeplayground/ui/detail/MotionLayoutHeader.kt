@@ -1,5 +1,6 @@
 package com.joseph.composeplayground.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -36,7 +37,8 @@ fun MotionLayoutHeader(
     movie: MovieDetail,
     scrollableBody: @Composable () -> Unit,
 ) {
-    val visibility by remember { mutableStateOf(progress == 0f) }
+    var isVisible by remember { mutableStateOf(progress == 1.0f) }
+    isVisible = progress == 1.0f
 
     MotionLayout(
         start = startConstraintSet(),
@@ -90,7 +92,7 @@ fun MotionLayoutHeader(
             textAlign = TextAlign.Center
         )
 
-        if (visibility) {
+        if (isVisible) {
             Column(
                 modifier = Modifier
                     .layoutId("ageBadge")
