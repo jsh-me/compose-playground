@@ -4,36 +4,36 @@ import com.joseph.domain.model.MovieDetailEntity
 
 
 data class MovieDetail(
-    val adult: Boolean?,
-    val backdropPath: String?,
-    val budget: Int?,
-    val genres: List<Genre>?,
-    val homepage: String?,
-    val id: Int?,
-    val imdbId: String?,
-    val originalLanguage: String?,
-    val originalTitle: String?,
-    val overview: String?,
-    val popularity: Double?,
-    val posterPath: String?,
-    val releaseDate: String?,
-    val revenue: Int?,
-    val runtime: Int?,
-    val status: String?,
-    val tagline: String?,
-    val title: String?,
-    val video: Boolean?,
-    val voteAverage: Double?,
-    val voteCount: Int?
+    val adult: Boolean? = null,
+    val backdropPath: String? = null,
+    val budget: Int? = null,
+    val genres: List<Genre>? = null,
+    val homepage: String? = null,
+    val id: Int? = null,
+    val imdbId: String? = null,
+    val originalLanguage: String? = null,
+    val originalTitle: String? = null,
+    val overview: String? = null,
+    val popularity: Double? = null,
+    val posterPath: String? = null,
+    val releaseDate: String? = null,
+    val revenue: Int? = null,
+    val runtime: Int? = null,
+    val status: String? = null,
+    val tagline: String? = null,
+    val title: String? = null,
+    val video: Boolean? = null,
+    val voteAverage: Double? = null,
+    val voteCount: Int? = null,
 ) {
     data class Genre(
         val id: Int?,
-        val name: String?
+        val name: String?,
     ) {
         companion object {
             fun fromEntity(entity: MovieDetailEntity.GenreEntity): Genre {
                 return Genre(
-                    id   = entity.id,
+                    id = entity.id,
                     name = entity.name
                 )
             }
@@ -43,27 +43,27 @@ data class MovieDetail(
     companion object {
         fun fromEntity(entity: MovieDetailEntity): MovieDetail {
             return MovieDetail(
-                adult            = entity.adult,
-                backdropPath     = entity.backdropPath,
-                budget           = entity.budget,
-                genres           = entity.genres?.map { Genre.fromEntity(it) },
-                homepage         = entity.homepage,
-                id               = entity.id,
-                imdbId           = entity.imdbId,
+                adult = entity.adult,
+                backdropPath = entity.backdropPath,
+                budget = entity.budget,
+                genres = entity.genres?.map { Genre.fromEntity(it) },
+                homepage = entity.homepage,
+                id = entity.id,
+                imdbId = entity.imdbId,
                 originalLanguage = entity.originalLanguage,
-                overview         = entity.overview,
-                originalTitle    = entity.originalTitle,
-                popularity       = entity.popularity,
-                posterPath       = entity.posterPath,
-                releaseDate      = entity.releaseDate,
-                revenue          = entity.revenue,
-                runtime          = entity.runtime,
-                status           = entity.status,
-                tagline          = entity.tagline,
-                title            = entity.title,
-                video            = entity.video,
-                voteAverage      = entity.voteAverage,
-                voteCount        = entity.voteCount
+                overview = entity.overview,
+                originalTitle = entity.originalTitle,
+                popularity = entity.popularity,
+                posterPath = entity.posterPath,
+                releaseDate = entity.releaseDate,
+                revenue = entity.revenue,
+                runtime = entity.runtime,
+                status = entity.status,
+                tagline = entity.tagline,
+                title = entity.title,
+                video = entity.video,
+                voteAverage = entity.voteAverage,
+                voteCount = entity.voteCount
             )
         }
     }

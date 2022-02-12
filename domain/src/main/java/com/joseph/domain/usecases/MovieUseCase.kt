@@ -66,7 +66,7 @@ class FetchMovieDetailUseCase @Inject constructor(
         val movieId: Int
     )
 
-    override suspend fun invoke(params: FetchMovieDetailUseCase.Params): Flow<TaskResult<InitialDetailScreenState>> {
+    override suspend fun invoke(params: Params): Flow<TaskResult<InitialDetailScreenState>> {
         return movieRepository.fetchMovieDetail(params.movieId)
             .zip(movieRepository.fetchSimilarMovieList(movieId = params.movieId, page = 1)) { movieDetail, similarMovies ->
                 movieDetail to similarMovies
