@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.joseph.composeplayground.model.Movie
 import com.joseph.composeplayground.model.MovieDetail
@@ -30,19 +31,20 @@ import com.joseph.composeplayground.ui.theme.Suit
 
 
 @Composable
-internal fun ScrollableContent(
+fun MovieContent(
     movieDetail: MovieDetail,
     recommendedMovie: List<Movie>,
+    navController: NavController,
 ) {
     LazyColumn(
         Modifier
             .padding(
-                bottom = 56.dp // We need to reduce content height by the height of collapsed content
+                bottom = 280.dp
             )
             .background(MaterialTheme.colors.background)
     ) {
         movieDetailBody(movieDetail)
-        recommendedMovies(recommendedMovie)
+        recommendedMovies(recommendedMovie, navController)
     }
 }
 
@@ -54,7 +56,7 @@ fun LazyListScope.movieDetailBody(movieDetail: MovieDetail) = with(movieDetail) 
     }
 }
 
-fun LazyListScope.recommendedMovies(movies: List<Movie>) {
+fun LazyListScope.recommendedMovies(movies: List<Movie>, navController: NavController) {
     item {
         Text(
             text = "추천영화",
@@ -68,12 +70,11 @@ fun LazyListScope.recommendedMovies(movies: List<Movie>) {
                 .padding(16.dp)
         )
 
-
         LazyRow {
             items(
                 items = movies,
                 itemContent = { movie ->
-                    RecommendedMovieItem(movie = movie)
+                    RecommendedMovieItem(movie = movie, navController)
                 },
             )
         }
@@ -144,8 +145,10 @@ fun MovieReleaseDate(movieDetail: MovieDetail) {
 }
 
 @Composable
-private fun RecommendedMovieItem(movie: Movie) {
-    GradientCard(movie = movie) {}
+private fun RecommendedMovieItem(movie: Movie, navController: NavController) {
+    GradientCard(movie = movie) {
+        navController.navigate("detail_screen/${movie.id}")
+    }
 }
 
 @Composable
@@ -153,10 +156,9 @@ fun GradientCard(
     movie: Movie,
     onClick: () -> Unit,
 ) = Card(modifier = Modifier
-    .fillMaxWidth()
-    .height(260.dp)
+    .size(150.dp, 200.dp)
     .clip(RoundedCornerShape(4.dp))
-    .padding(16.dp)
+    .padding(start = 16.dp, end = 16.dp)
     .clickable { onClick() },
     elevation = 4.dp
 ) {

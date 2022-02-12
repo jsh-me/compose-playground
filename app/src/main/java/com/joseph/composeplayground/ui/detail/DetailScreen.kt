@@ -22,6 +22,7 @@ fun DetailScreen(
 
     CollapsableToolbar(
         uiState.value.detailMovieState.targetMovie,
-        uiState.value.recommendMovies.movies
+        uiState.value.recommendMovies.movies,
+        navController
     )
 }

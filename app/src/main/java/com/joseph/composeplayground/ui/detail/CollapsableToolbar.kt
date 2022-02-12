@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ExperimentalMotionApi
+import androidx.navigation.NavController
 import com.joseph.composeplayground.model.Movie
 import com.joseph.composeplayground.model.MovieDetail
 
@@ -24,6 +25,7 @@ import com.joseph.composeplayground.model.MovieDetail
 fun CollapsableToolbar(
     movieDetail: MovieDetail,
     recommendedMovie: List<Movie>,
+    navController: NavController,
 ) {
     val swipingState = rememberSwipeableState(initialValue = SwipingStates.EXPANDED)
 
@@ -93,9 +95,10 @@ fun CollapsableToolbar(
                     progress = progress.getOrDefault(0f),
                     movie = movieDetail
                 ) {
-                    ScrollableContent(
+                    MovieContent(
                         movieDetail,
-                        recommendedMovie
+                        recommendedMovie,
+                        navController
                     )
                 }
             }

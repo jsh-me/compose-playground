@@ -50,7 +50,7 @@ fun MotionLayoutHeader(
     ) {
         Image(
             painter = rememberImagePainter("https://image.tmdb.org/t/p/w500${movie.backdropPath}"),
-            contentDescription = "poster",
+            contentDescription = "backdrop",
             modifier = Modifier
                 .height(240.dp)
                 .layoutId("backdrop"),
@@ -61,7 +61,7 @@ fun MotionLayoutHeader(
 
         Image(
             painter = rememberImagePainter("https://image.tmdb.org/t/p/w500${movie.posterPath}"),
-            contentDescription = "",
+            contentDescription = "poster",
             modifier = Modifier
                 .layoutId("poster")
                 .width(120.dp)
