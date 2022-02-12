@@ -64,122 +64,104 @@ fun HomeScreen(
                 .padding(start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                Title()
-                MainSearchBar(viewModel)
-                UpcomingMovies(
-                    list = uiState.value.upComingMovieList.movies,
-                    navController = navController
-                )
-
-                // 어떻게 묶을 수 있을라나
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 26.dp),
-                    text = "Popular Movies",
-                    fontFamily = Suit,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Left,
-                    color = Color.White
-                )
-//                PopularMovies {
-//                    this@LazyColumn.items(
-//                        items = uiState.value.popularMovieList.movies,
-//                        itemContent = {
-//                            PopularMovieItem(movie = it)
-//                        }
-//                    )
-//                }
-            }
-
-            items(
-                items = uiState.value.popularMovieList.movies,
-                itemContent = {
-                    PopularMovieItem(movie = it, navController)
-                }
+            title()
+            mainSearchBar(viewModel)
+            upcomingMovies(
+                list = uiState.value.upComingMovieList.movies,
+                navController = navController
+            )
+            this@LazyColumn.popularMovies(
+                uiState.value.popularMovieList.movies,
+                navController
             )
         }
     }
 }
 
-// 어떻게 하징
-@Composable
-fun PopularMovies(content: @Composable () -> Unit) {
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 26.dp),
-        text = "Popular Movies",
-        fontFamily = Suit,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        textAlign = TextAlign.Left,
-        color = Color.White
-    )
-    content()
-}
-
-@Composable
-fun Title() {
-    TwoLinesText(
-        title = "Compose Playground",
-        titleTextSize = 18.sp,
-        subTitle = "Jetpack Compose + MVI",
-        subTitleTextSize = 14.sp,
-        modifier = Modifier.wrapContentWidth(),
-        horizontalAlignment = Alignment.Start
-    )
-}
-
-@Composable
-fun MainSearchBar(viewModel: HomeViewModel) {
-    TextField(
-        value = "",
-        onValueChange = {
-            viewModel.searchKeyword(it)
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp)),
-        label = {
-            Text("Search Movie")
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Search
-        ),
-        singleLine = true,
-        leadingIcon = {
-            Icon(Icons.Filled.Search, "")
-        },
-    )
-}
-
-@Composable
-fun UpcomingMovies(list: List<Movie>, navController: NavController) {
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 26.dp, bottom = 12.dp),
-        text = "Upcoming Movies",
-        fontFamily = Suit,
-        fontWeight = FontWeight.Bold,
-        fontSize = 14.sp,
-        textAlign = TextAlign.Left,
-        color = Color.White
-    )
-
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(
-            items = list,
-            itemContent = {
-                UpcomingMovieItem(movie = it, navController)
-            }
+fun LazyListScope.popularMovies(movie: List<Movie>, navController: NavController) {
+    item {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 26.dp),
+            text = "Popular Movies",
+            fontFamily = Suit,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Left,
+            color = Color.White
         )
+    }
+    items(
+        items = movie,
+        itemContent = {
+            PopularMovieItem(movie = it, navController)
+        }
+    )
+}
+
+fun LazyListScope.title() {
+    item {
+        TwoLinesText(
+            title = "Compose Playground",
+            titleTextSize = 18.sp,
+            subTitle = "Jetpack Compose + MVI",
+            subTitleTextSize = 14.sp,
+            modifier = Modifier.wrapContentWidth(),
+            horizontalAlignment = Alignment.Start
+        )
+    }
+}
+
+fun LazyListScope.mainSearchBar(viewModel: HomeViewModel) {
+    item {
+        TextField(
+            value = "",
+            onValueChange = {
+                viewModel.searchKeyword(it)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp)),
+            label = {
+                Text("Search Movie")
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Search
+            ),
+            singleLine = true,
+            leadingIcon = {
+                Icon(Icons.Filled.Search, "")
+            },
+        )
+    }
+}
+
+fun LazyListScope.upcomingMovies(list: List<Movie>, navController: NavController) {
+    item {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 26.dp, bottom = 12.dp),
+            text = "Upcoming Movies",
+            fontFamily = Suit,
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Left,
+            color = Color.White
+        )
+
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            items(
+                items = list,
+                itemContent = {
+                    UpcomingMovieItem(movie = it, navController)
+                }
+            )
+        }
     }
 }
 

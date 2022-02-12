@@ -96,7 +96,7 @@ fun CollapsableToolbar(
                     progress = progress.getOrDefault(0f),
                     movie = movieDetail
                 ) {
-                    MovieContent(
+                    MotionLayoutContent(
                         movieDetail,
                         recommendedMovie,
                         navController

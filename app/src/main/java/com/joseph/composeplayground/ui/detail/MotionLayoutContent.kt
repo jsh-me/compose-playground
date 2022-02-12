@@ -31,7 +31,7 @@ import com.joseph.composeplayground.ui.theme.Suit
 
 
 @Composable
-fun MovieContent(
+fun MotionLayoutContent(
     movieDetail: MovieDetail,
     recommendedMovie: List<Movie>,
     navController: NavController,
