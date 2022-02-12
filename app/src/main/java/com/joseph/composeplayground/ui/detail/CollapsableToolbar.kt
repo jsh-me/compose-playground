@@ -92,6 +92,7 @@ fun CollapsableToolbar(
                 }
 
                 MotionLayoutHeader(
+                    // default 를 0으로 넣으면 안될듯
                     progress = progress.getOrDefault(0f),
                     movie = movieDetail
                 ) {

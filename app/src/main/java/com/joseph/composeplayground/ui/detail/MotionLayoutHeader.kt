@@ -1,6 +1,10 @@
 package com.joseph.composeplayground.ui.detail
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -10,14 +14,14 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -66,7 +70,7 @@ fun MotionLayoutHeader(
                 .layoutId("poster")
                 .width(120.dp)
                 .height(180.dp)
-                .clip(RoundedCornerShape(4.dp))
+                .clip(RoundedCornerShape(4.dp)),
         )
 
         Text(
@@ -85,7 +89,7 @@ fun MotionLayoutHeader(
             text = movie.originalTitle ?: "",
             modifier = Modifier
                 .layoutId("subTitle")
-                .fillMaxWidth(),
+                .wrapContentWidth(),
             color = Color.White,
             fontSize = 12.sp,
             maxLines = 1,
@@ -99,16 +103,19 @@ fun MotionLayoutHeader(
                     .size(48.dp)
                     .clip(RoundedCornerShape(4.dp))
                     .background(Color.White),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "등급",
+                    fontWeight = FontWeight.Bold,
                     color = Color.Black, fontSize = 10.sp,
                 )
-
                 Text(
-                    text = movie.voteAverage.toString(),
-                    color = Color.Black, fontSize = 10.sp
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    text = if (movie.adult == true) "성인" else "전체",
+                    color = if (movie.adult == true) Color.Red else Color.Black
                 )
             }
 
@@ -117,20 +124,21 @@ fun MotionLayoutHeader(
                     .layoutId("ratingBadge")
                     .size(48.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(Color.White),
-                verticalArrangement = Arrangement.Center
+                    .background(Color.White)
+                    .alpha(progress),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             )
             {
                 Text(
                     text = "평점",
+                    fontWeight = FontWeight.Bold,
                     color = Color.Black, fontSize = 10.sp
                 )
-
                 Text(
-                    textAlign = TextAlign.Center,
-                    fontSize = 10.sp,
-                    text = if (movie.adult == true) "성인" else "전체",
-                    color = if (movie.adult == true) Color.Red else Color.Black)
+                    text = movie.voteAverage.toString(),
+                    color = Color.Black, fontSize = 10.sp
+                )
             }
         }
 
@@ -143,7 +151,6 @@ fun MotionLayoutHeader(
     }
 }
 
-// Constraint Sets defined by using Kotlin DSL option
 private fun startConstraintSet() = ConstraintSet {
     val backdrop = createRefFor("backdrop")
     val poster = createRefFor("poster")
@@ -216,13 +223,13 @@ private fun endConstraintSet() = ConstraintSet {
     }
 
     constrain(subTitle) {
-        width = Dimension.wrapContent
-        start.linkTo(poster.end, 16.dp)
-        top.linkTo(poster.top)
+        width = Dimension.preferredWrapContent
+        start.linkTo(ratingBadge.start)
+        bottom.linkTo(ratingBadge.top, 16.dp)
     }
 
     constrain(ratingBadge) {
-        start.linkTo(subTitle.start)
+        start.linkTo(poster.end, 16.dp)
         bottom.linkTo(poster.bottom)
     }
 
