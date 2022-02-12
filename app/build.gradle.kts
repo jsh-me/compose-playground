@@ -67,7 +67,7 @@ dependencies {
     implementation(Dependency.Compose.TOOL_PREVIEW)
     implementation(Dependency.Compose.ACTIVITY)
     implementation(Dependency.Compose.CONSTRAINT_LAYOUT)
-
+    implementation(Dependency.Compose.NAVIGATION)
     androidTestImplementation(Dependency.Compose.JUNIT)
     debugImplementation(Dependency.Compose.TOOL_UI)
 
