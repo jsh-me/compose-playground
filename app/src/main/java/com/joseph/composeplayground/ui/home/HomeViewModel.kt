@@ -66,7 +66,6 @@ class HomeViewModel @Inject constructor(
                     val newState = uiState.value.copy(
                         loadState = LoadState.Idle,
                         popularMovieList = uiState.value.popularMovieList.copy(
-                            // 이런 형태야 말로 동시성을 깨트리는 로직이 아닌가?
                             movies = uiState.value.popularMovieList.movies + movieListEntity.results.map { Movie.fromEntity(it) },
                             page = movieListEntity.page
                         )

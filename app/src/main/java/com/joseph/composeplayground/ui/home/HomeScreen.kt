@@ -4,6 +4,7 @@ package com.joseph.composeplayground.ui.home
 import android.icu.text.CaseMap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -66,7 +67,10 @@ fun HomeScreen(
             item {
                 Title()
                 MainSearchBar(viewModel)
-                UpcomingMovies(list = uiState.value.upComingMovieList.movies)
+                UpcomingMovies(
+                    list = uiState.value.upComingMovieList.movies,
+                    navController = navController
+                )
 
                 // 어떻게 묶을 수 있을라나
                 Text(
@@ -93,7 +97,7 @@ fun HomeScreen(
             items(
                 items = uiState.value.popularMovieList.movies,
                 itemContent = {
-                    PopularMovieItem(movie = it)
+                    PopularMovieItem(movie = it, navController)
                 }
             )
         }
@@ -154,7 +158,7 @@ fun MainSearchBar(viewModel: HomeViewModel) {
 }
 
 @Composable
-fun UpcomingMovies(list: List<Movie>) {
+fun UpcomingMovies(list: List<Movie>, navController: NavController) {
     Text(
         modifier = Modifier
             .fillMaxWidth()
@@ -173,14 +177,14 @@ fun UpcomingMovies(list: List<Movie>) {
         items(
             items = list,
             itemContent = {
-                UpcomingMovieItem(movie = it)
+                UpcomingMovieItem(movie = it, navController)
             }
         )
     }
 }
 
 @Composable
-fun UpcomingMovieItem(movie: Movie) {
+fun UpcomingMovieItem(movie: Movie, navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .clip(RoundedCornerShape(8.dp))
@@ -199,7 +203,10 @@ fun UpcomingMovieItem(movie: Movie) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                     width = Dimension.wrapContent
-                }
+                },
+            onClick = {
+                navController.navigate("detail_screen/${movie.id}")
+            }
         )
 
         TwoLinesText(
@@ -218,7 +225,7 @@ fun UpcomingMovieItem(movie: Movie) {
 }
 
 @Composable
-fun PopularMovieItem(movie: Movie) {
+fun PopularMovieItem(movie: Movie, navController: NavController) {
     ConstraintLayout(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
@@ -238,7 +245,11 @@ fun PopularMovieItem(movie: Movie) {
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
-                })
+                },
+            onClick = {
+                navController.navigate("detail_screen/${movie.id}")
+            }
+        )
 
         IconButton(
             modifier = Modifier
@@ -304,7 +315,7 @@ fun TwoLinesText(
     subTitle: String,
     subTitleTextSize: TextUnit,
     modifier: Modifier,
-    horizontalAlignment: Alignment.Horizontal = Alignment.End
+    horizontalAlignment: Alignment.Horizontal = Alignment.End,
 ) {
     Column(
         modifier = modifier,
@@ -332,12 +343,14 @@ fun GradientCard(
     movie: Movie,
     content: @Composable (() -> Unit)? = null,
     modifier: Modifier,
+    onClick: () -> Unit,
 ) = Box {
     Image(
         painter = rememberImagePainter("https://image.tmdb.org/t/p/w500${movie.backdropPath}"),
         contentDescription = movie.title,
         contentScale = ContentScale.FillBounds,
         modifier = modifier
+            .clickable { onClick() },
     )
 
     Column(
